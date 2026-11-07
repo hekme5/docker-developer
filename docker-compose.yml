@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ubuntu-gui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ubuntu-desktop
+    restart: unless-stopped
+    ports:
+      # Access the desktop in your web browser: http://localhost:6080
+      - "6080:6080"
+      # Access via standard VNC client (e.g., TigerVNC, RealVNC): localhost:5900
+      - "5909:5900"
+    environment:
+      # Screen resolution: WIDTHxHEIGHTxDEPTH (e.g., 1920x1080x24, 1440x900x24, 1280x800x24)
+      - RESOLUTION=1920x1200x24
+      #1280x800x24
+      # Set a password for VNC / web access. Leave empty ("") for passwordless login.
+      - VNC_PASSWORD=ubuntu
+    volumes:
+      # Persist workspace files between container restarts
+      - ./workspace:/home/developer/workspace
+    # Allocate shared memory for IDEs, browser rendering, and desktop stability
+    shm_size: '2gb'
